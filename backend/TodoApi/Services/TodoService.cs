@@ -19,7 +19,7 @@ namespace TodoApi.Services
         public TodoService()
         {
             // Add some sample data
-            _todoItems.Add(new TodoItem { Id = _nextId++, Title = "Learn Angular", IsCompleted = false, CreatedAt = DateTime.UtcNow.AddDays(-2) });
+            _todoItems.Add(new TodoItem { Id = _nextId++, Title = "Frontend Angular", IsCompleted = false, CreatedAt = DateTime.UtcNow.AddDays(-2) });
             _todoItems.Add(new TodoItem { Id = _nextId++, Title = "Build .NET Web API", IsCompleted = true, CreatedAt = DateTime.UtcNow.AddDays(-1) });
             _todoItems.Add(new TodoItem { Id = _nextId++, Title = "Create TODO App", IsCompleted = false, CreatedAt = DateTime.UtcNow });
         }
