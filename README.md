@@ -122,7 +122,7 @@ Open your browser and navigate to `http://localhost:4200`
 ```json
 {
   "id": 1,
-  "title": "Learn Angular",
+  "title": "frontend Angular",
   "isCompleted": false,
   "createdAt": "2025-08-03T09:10:11.155945Z"
 }
