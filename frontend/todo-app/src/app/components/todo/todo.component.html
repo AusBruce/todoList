@@ -1,0 +1,78 @@
+<div class="todo-container">
+  <div class="todo-header">
+    <h1>📝 Todo List</h1>
+    <p class="subtitle">Stay organized and productive</p>
+  </div>
+
+  <!-- Add Todo Form -->
+  <div class="add-todo-section">
+    <div class="input-group">
+      <input 
+        type="text" 
+        [(ngModel)]="newTodoTitle" 
+        (keyup)="onKeyPress($event)"
+        placeholder="What needs to be done?"
+        class="todo-input"
+        [disabled]="loading"
+      >
+      <button 
+        (click)="addTodo()" 
+        class="add-button"
+        [disabled]="!newTodoTitle.trim() || loading"
+      >
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading todos...</p>
+  </div>
+
+  <!-- Todo List -->
+  <div *ngIf="!loading && todos.length > 0" class="todo-list">
+    <div 
+      *ngFor="let todo of todos" 
+      class="todo-item"
+      [class.completed]="todo.isCompleted"
+    >
+      <div class="todo-content">
+        <button 
+          (click)="toggleTodo(todo)" 
+          class="toggle-button"
+          [class.checked]="todo.isCompleted"
+        >
+          <span *ngIf="todo.isCompleted">✓</span>
+        </button>
+        
+        <span class="todo-title">{{ todo.title }}</span>
+        
+        <span class="todo-date">
+          {{ todo.createdAt | date:'short' }}
+        </span>
+      </div>
+      
+      <button 
+        (click)="deleteTodo(todo)" 
+        class="delete-button"
+        title="Delete todo"
+      >
+        🗑️
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && todos.length === 0" class="empty-state">
+    <div class="empty-icon">📝</div>
+    <h3>No todos yet</h3>
+    <p>Add your first todo item above to get started!</p>
+  </div>
+</div> 
