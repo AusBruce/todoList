@@ -34,7 +34,7 @@ describe('TodoService', () => {
         expect(todos).toEqual(mockTodos);
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo');
+      const req = httpMock.expectOne('http://localhost:5206/api/todo');
       expect(req.request.method).toBe('GET');
       req.flush(mockTodos);
     });
@@ -53,7 +53,7 @@ describe('TodoService', () => {
         expect(todo).toEqual(mockTodo);
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo/1');
+      const req = httpMock.expectOne('http://localhost:5206/api/todo/1');
       expect(req.request.method).toBe('GET');
       req.flush(mockTodo);
     });
@@ -73,7 +73,7 @@ describe('TodoService', () => {
         expect(todo).toEqual(createdTodo);
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo');
+      const req = httpMock.expectOne('http://localhost:5206/api/todo');
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(newTodo);
       req.flush(createdTodo);
@@ -94,7 +94,7 @@ describe('TodoService', () => {
         expect(todo).toEqual(updatedTodo);
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo/1');
+      const req = httpMock.expectOne('http://localhost:5206/api/todo/1');
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(updateData);
       req.flush(updatedTodo);
@@ -107,7 +107,7 @@ describe('TodoService', () => {
         expect(response).toBeNull();
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo/1');
+      const req = httpMock.expectOne('http://localhost:5206/api/todo/1');
       expect(req.request.method).toBe('DELETE');
       req.flush(null);
     });
@@ -126,7 +126,7 @@ describe('TodoService', () => {
         expect(todo).toEqual(toggledTodo);
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo/1/toggle');
+      const req = httpMock.expectOne('http://localhost:5206/api/todo/1/toggle');
       expect(req.request.method).toBe('PATCH');
       req.flush(toggledTodo);
     });
@@ -134,29 +134,32 @@ describe('TodoService', () => {
 
   describe('error handling', () => {
     it('should handle HTTP errors for getTodos', () => {
+      const errorMessage = 'Network error';
+
       service.getTodos().subscribe({
-        next: () => fail('should have failed'),
+        next: () => fail('should have failed with network error'),
         error: (error) => {
-          expect(error.status).toBe(500);
+          expect(error.error).toBe(errorMessage);
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo');
-      req.error(new ErrorEvent('Network error'), { status: 500 });
+      const req = httpMock.expectOne('http://localhost:5206/api/todo');
+      req.flush(errorMessage, { status: 500, statusText: 'Internal Server Error' });
     });
 
     it('should handle HTTP errors for createTodo', () => {
+      const errorMessage = 'Network error';
       const newTodo = { title: 'New Todo', isCompleted: false };
 
       service.createTodo(newTodo).subscribe({
-        next: () => fail('should have failed'),
+        next: () => fail('should have failed with network error'),
         error: (error) => {
-          expect(error.status).toBe(400);
+          expect(error.error).toBe(errorMessage);
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:5000/api/todo');
-      req.error(new ErrorEvent('Bad Request'), { status: 400 });
+      const req = httpMock.expectOne('http://localhost:5206/api/todo');
+      req.flush(errorMessage, { status: 500, statusText: 'Internal Server Error' });
     });
   });
 }); 
